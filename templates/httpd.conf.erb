@@ -41,6 +41,10 @@ EnableSendfile <%= @sendfile %>
 #LoadModule fake_module libexec/apache22/mod_fake.so
 <% end -%>
 
+<% if @operatingsystem == "Fedora" && @operatingsystemrelease.to_i >= 19 -%>
+# Fedora 19+ loads modules directory from conf.modules.d
+Include conf.modules.d/*.conf 
+<% end -%>
 Include <%= @mod_load_dir %>/*.load
 <% if @mod_load_dir != @confd_dir and @mod_load_dir != @vhost_load_dir -%>
 Include <%= @mod_load_dir %>/*.conf

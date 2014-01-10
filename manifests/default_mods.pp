@@ -25,12 +25,14 @@ class apache::default_mods (
         include apache::mod::mime_magic
         include apache::mod::vhost_alias
         include apache::mod::rewrite
+        if $::operatingsystem != "Fedora" or ($::operatingsystem == "Fedora" and $::operatingsystemrelease < 19) {
+          apache::mod { 'authn_alias': }
+          apache::mod { 'authn_default': }
+        } 
         apache::mod { 'actions': }
         apache::mod { 'auth_digest': }
-        apache::mod { 'authn_alias': }
         apache::mod { 'authn_anon': }
         apache::mod { 'authn_dbm': }
-        apache::mod { 'authn_default': }
         apache::mod { 'authz_dbm': }
         apache::mod { 'authz_owner': }
         apache::mod { 'expires': }
@@ -98,10 +100,12 @@ class apache::default_mods (
     include apache::mod::setenvif
     apache::mod { 'auth_basic': }
     apache::mod { 'authn_file': }
-    apache::mod { 'authz_default': }
     apache::mod { 'authz_groupfile': }
     apache::mod { 'authz_user': }
     apache::mod { 'env': }
+    if $::operatingsystem != "Fedora" or ($::operatingsystem == "Fedora" and $::operatingsystemrelease < 19) {
+	    apache::mod { 'authz_default': }
+    }
   } elsif $mods {
     apache::default_mods::load { $mods: }
   }
